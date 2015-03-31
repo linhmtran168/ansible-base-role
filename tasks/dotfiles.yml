@@ -1,0 +1,33 @@
+---
+- name: set default shell for current user to zsh
+  user: name={{ base_setup_user }} shell=/bin/zsh
+
+- name: setup prezto
+  git: repo=https://github.com/sorin-ionescu/prezto.git dest=/home/{{ user }}/.zprezto accept_hostkey=true
+  sudo: yes
+  sudo_user: "{{ base_setup_user }}"
+
+- name: get linux configuration file
+  git: repo=https://github.com/linhmtran168/linux_dotfiles.git dest=/home/{{ user }}/dotfiles accept_hostkey=true
+  sudo: yes
+  sudo_user: "{{ base_setup_user }}"
+
+- name: link zsh, tmux configurations
+  file: state=link src=/home/{{ user }}/dotfiles/{{ item }} path=/home/{{ user }}/{{ item }}
+  with_items:
+    - .tmux.conf
+    - .zshrc
+    - .zprofile
+    - .zpreztorc
+  sudo: yes
+  sudo_user: "{{ base_setup_user }}"
+
+- name: create global zsh configuration
+  file: state=touch path=/etc/zprofile
+
+- name: link zpreztorc theme
+  file: state=link src=/home/{{ user }}/dotfiles/{{ item}} path=/home/{{ user }}/.zprezto/modules/prompt/functions/{{ item }}
+  with_items:
+    - prompt_superlinh_setup
+  sudo: yes
+  sudo_user: "{{ base_setup_user }}"

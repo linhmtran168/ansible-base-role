@@ -1,0 +1,4 @@
+---
+# defaults file for ansible-ubuntu-base
+base_host_name: dev.local
+base_setup_user: linhtm
