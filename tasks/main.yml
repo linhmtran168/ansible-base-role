@@ -10,6 +10,7 @@
     - vim
     - zsh
     - build-essential
+    - libssl-dev
     - curl
     - wget
     - postfix
